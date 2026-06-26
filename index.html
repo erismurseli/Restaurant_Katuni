@@ -200,26 +200,33 @@ html.dark .icon-moon{opacity:1;transform:rotate(0deg) scale(1);}
 /* Hero */
 .hero-frame{
   position:relative;
-  padding:5px;
   overflow:hidden;
-  isolation:isolate;
-  background:#0c0908;
-}
-.hero-frame::before{
-  content:'';
-  position:absolute;
-  inset:-60%;
-  background:conic-gradient(from 0deg,
-    var(--accent) 0%, var(--accent-2) 18%, #FBF1DE 32%,
-    var(--accent) 50%, var(--accent-2) 68%, #FBF1DE 82%, var(--accent) 100%);
-  animation:heroBorderSpin 9s linear infinite;
-  filter:blur(1px);
-  z-index:0;
 }
 .hero-frame > #hero{position:relative;z-index:1;}
-@keyframes heroBorderSpin{to{transform:rotate(360deg);}}
+.hero-border-svg{
+  position:absolute;inset:0;z-index:2;
+  width:100%;height:100%;
+  pointer-events:none;
+  --hero-perimeter:2000px;
+}
+.hero-border-svg rect{
+  fill:none;
+  stroke:rgba(255,255,255,.14);
+  stroke-width:1;
+}
+.hero-border-svg .hero-border-comet{
+  stroke:var(--accent-2);
+  stroke-width:6;
+  stroke-linecap:round;
+  filter:drop-shadow(0 0 6px var(--accent-2));
+  animation:heroCometTravel 7s linear infinite;
+}
+@keyframes heroCometTravel{
+  from{stroke-dashoffset:0;}
+  to{stroke-dashoffset:calc(-1 * var(--hero-perimeter));}
+}
 @media(prefers-reduced-motion:reduce){
-  .hero-frame::before{animation:none;}
+  .hero-border-svg .hero-border-comet{animation:none;}
 }
 #hero{
   position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;
@@ -343,6 +350,32 @@ html.dark .icon-moon{opacity:1;transform:rotate(0deg) scale(1);}
 .admin-reservation-card .res-name{font-weight:700;margin-bottom:4px;}
 .admin-reservation-card .res-meta{color:var(--text-muted);font-size:.82rem;}
 .admin-empty-state{text-align:center;color:var(--text-muted);padding:30px 0;font-size:.9rem;}
+
+/* Side accent lines (Ambientet Tona -> Footer) */
+.side-lines-wrap{position:relative;}
+.side-lines-wrap::before,
+.side-lines-wrap::after{
+  content:'';
+  position:absolute;
+  top:0;bottom:0;
+  width:2px;
+  background:linear-gradient(to bottom,
+    transparent 0%, var(--accent-2) 6%, var(--accent-2) 94%, transparent 100%);
+  box-shadow:0 0 8px var(--accent-2), 0 0 2px var(--accent-2);
+  opacity:.5;
+  z-index:1;
+  pointer-events:none;
+  animation:sideLinePulse 4s ease-in-out infinite alternate;
+}
+.side-lines-wrap::before{left:0;}
+.side-lines-wrap::after{right:0;}
+@keyframes sideLinePulse{
+  from{opacity:.35;}
+  to{opacity:.7;}
+}
+@media(prefers-reduced-motion:reduce){
+  .side-lines-wrap::before, .side-lines-wrap::after{animation:none;opacity:.5;}
+}
 
 /* Back to top */
 #back-to-top{
@@ -538,6 +571,10 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
 
 <!-- HERO -->
 <div class="hero-frame">
+<svg class="hero-border-svg" id="hero-border-svg">
+  <rect x="1" y="1" width="0" height="0"></rect>
+  <rect class="hero-border-comet" x="1" y="1" width="0" height="0"></rect>
+</svg>
 <header id="hero">
   <div class="max-w-4xl mx-auto px-6 text-center pt-10 md:pt-20">
     <p class="eyebrow mb-7" style="color:#E9C98B;letter-spacing:.32em" data-i18n="hero_eyebrow">Restorant Tradicional · Kaçanik</p>
@@ -568,6 +605,7 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
   </div>
 </section>
 
+<div class="side-lines-wrap">
 <!-- AMBIENTET TONA -->
 <section id="ambientet" class="section-pad bg-alt overflow-hidden">
   <div class="max-w-6xl mx-auto px-6">
@@ -1020,6 +1058,7 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
     </div>
   </div>
 </section>
+</div>
 
 <!-- FOOTER -->
 <footer class="pt-16 pb-8">
@@ -1112,6 +1151,44 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
 
 
 <script>
+/* ---------- HERO ANIMATED BORDER ---------- */
+function setupHeroBorder(){
+  const frame = document.querySelector('.hero-frame');
+  const svg = document.getElementById('hero-border-svg');
+  const navbar = document.getElementById('navbar');
+  if(!frame || !svg) return;
+  const w = Math.round(frame.offsetWidth);
+  const h = Math.round(frame.offsetHeight);
+  if(!w || !h) return;
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+
+  const navbarHeight = navbar ? Math.round(navbar.offsetHeight) : 0;
+  const sideInset = 1;
+  const topInset = navbarHeight + 6;
+  const bottomInset = 1;
+  const rx = sideInset;
+  const ry = topInset;
+  const rw = w - sideInset * 2;
+  const rh = h - topInset - bottomInset;
+  const perimeter = 2 * (rw + rh);
+  const dashLen = Math.max(60, Math.min(140, Math.round(perimeter * 0.035)));
+
+  svg.querySelectorAll('rect').forEach(r=>{
+    r.setAttribute('x', rx);
+    r.setAttribute('y', ry);
+    r.setAttribute('width', rw);
+    r.setAttribute('height', rh);
+  });
+  const comet = svg.querySelector('.hero-border-comet');
+  if(comet){
+    comet.style.strokeDasharray = `${dashLen} ${Math.max(0, perimeter - dashLen)}`;
+  }
+  svg.style.setProperty('--hero-perimeter', perimeter + 'px');
+}
+window.addEventListener('load', setupHeroBorder);
+window.addEventListener('resize', setupHeroBorder);
+setupHeroBorder();
+
 /* ---------- PRELOADER ---------- */
 window.addEventListener('load', function(){
   setTimeout(function(){
