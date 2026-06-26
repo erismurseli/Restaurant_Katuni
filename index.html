@@ -505,11 +505,11 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
 
 <!-- HERO -->
 <header id="hero">
-  <div class="max-w-4xl mx-auto px-6 text-center">
+  <div class="max-w-4xl mx-auto px-6 text-center pt-10 md:pt-20">
     <p class="eyebrow mb-7" style="color:#E9C98B;letter-spacing:.32em" data-i18n="hero_eyebrow">Restorant Tradicional · Kaçanik</p>
     <h1 class="hero-headline text-5xl md:text-7xl leading-tight mb-8" data-i18n="hero_title">Shijoni shijen tonë<br>tradicionale</h1>
-    <p class="text-base md:text-xl mb-12 max-w-lg mx-auto leading-relaxed" style="color:#F1E9D8" data-i18n="hero_subtitle">Mirësevini në Restorant Katuni, ku çdo pjatë ka histori.</p>
-    <a href="#kontakto" class="cta-pill" data-i18n="hero_cta">Na Kontakto</a>
+    <p class="text-base md:text-xl font-medium mb-12 max-w-lg mx-auto leading-relaxed" style="color:#F6EFE2;text-shadow:0 2px 6px rgba(0,0,0,.5)" data-i18n="hero_subtitle">Mirësevini në Restorant Katuni, ku çdo pjatë ka histori.</p>
+    <a href="#kontakto" class="cta-pill" data-i18n="hero_cta">Rezervo një Tavolinë</a>
   </div>
 </header>
 
@@ -1013,6 +1013,66 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
   </div>
 </footer>
 
+<!-- BACK TO TOP -->
+<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="if(event.target===this) closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <button class="lightbox-prev" onclick="lightboxNav(-1)" aria-label="Previous">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <img id="lightbox-img" src="" alt="Ambienti Katuni">
+  <button class="lightbox-next" onclick="lightboxNav(1)" aria-label="Next">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </button>
+</div>
+
+<!-- TIME ERROR MODAL -->
+<div id="time-error-modal" class="admin-modal-overlay" onclick="if(event.target===this) closeTimeErrorModal()">
+  <div class="admin-modal-box" style="max-width:380px;text-align:center;">
+    <button class="admin-modal-close" onclick="closeTimeErrorModal()" aria-label="Close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <h3 class="font-display text-xl mb-3" data-i18n="time_error_title">Ora jo e Disponueshme</h3>
+    <p class="text-sm mb-5" style="color:var(--text-muted)" data-i18n="time_error_text">Rezervimet pranohen vetëm nga ora 09:00 deri në 21:00.</p>
+    <button class="btn-primary w-full" onclick="closeTimeErrorModal()" data-i18n="time_error_button">Kuptova</button>
+  </div>
+</div>
+
+<!-- ADMIN LOGIN MODAL -->
+<div id="admin-login-modal" class="admin-modal-overlay" onclick="if(event.target===this) closeAdminLogin()">
+  <div class="admin-modal-box">
+    <button class="admin-modal-close" onclick="closeAdminLogin()" aria-label="Close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <h3 class="font-display text-2xl mb-3" data-i18n="admin_login_title">Hyrja e Administratorit</h3>
+    <p class="text-sm mb-5" style="color:var(--text-muted)" data-i18n="admin_login_text">Vendosni fjalëkalimin për të parë rezervimet dhe mesazhet.</p>
+    <input type="password" id="admin-password-input" class="field mb-3" data-i18n-placeholder="admin_login_placeholder" placeholder="Fjalëkalimi" onkeydown="if(event.key==='Enter') checkAdminPassword()">
+    <p id="admin-login-error" class="text-sm hidden mb-3" style="color:#C0392B" data-i18n="admin_login_error">Fjalëkalimi është i gabuar.</p>
+    <button class="btn-primary w-full" onclick="checkAdminPassword()" data-i18n="admin_login_button">Hyr</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL MODAL -->
+<div id="admin-panel-modal" class="admin-modal-overlay" onclick="if(event.target===this) closeAdminPanel()">
+  <div class="admin-modal-box admin-panel-box">
+    <button class="admin-modal-close" onclick="closeAdminPanel()" aria-label="Close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="flex items-center justify-between mb-6 pr-6">
+      <h3 class="font-display text-2xl" data-i18n="admin_panel_title">Rezervimet &amp; Mesazhet</h3>
+      <button onclick="clearAdminReservations()" class="text-xs font-semibold underline" style="color:#C0392B" data-i18n="admin_clear_all">Pastro të gjitha</button>
+    </div>
+    <div id="admin-reservations-list" class="admin-reservations-list"></div>
+  </div>
+</div>
+
+
 <script>
 /* ---------- PRELOADER ---------- */
 window.addEventListener('load', function(){
@@ -1031,7 +1091,7 @@ const translations = {
     hero_eyebrow:"Restorant Tradicional · Kaçanik",
     hero_title:"Shijoni shijen tonë<br>tradicionale",
     hero_subtitle:"Mirësevini në Restorant Katuni, ku çdo pjatë ka histori.",
-    hero_cta:"Na Kontakto",
+    hero_cta:"Rezervo një Tavolinë",
     about_eyebrow:"Trashëgimia Jonë", about_title:"Rreth Nesh",
     about_p1:"Restorant Katuni lindi nga dëshira për të ruajtur shijet dhe traditat e katundeve tona, duke i sjellë në një ambient modern e të rehatshëm. Çdo recetë vjen nga përvoja shumëvjeçare e familjeve të Kaçanikut, ku gatimi është art i trashëguar brez pas brezi.",
     about_p2:"Këtu, mikpritja nuk është thjesht shërbim — është një ndjenjë. Çdo mysafir trajtohet si pjesë e familjes, ndërsa çdo pjatë përgatitet me përbërës të freskët e autentikë, drejt nga toka jonë në tavolinën tuaj.",
@@ -1090,7 +1150,7 @@ const translations = {
     hero_eyebrow:"Traditional Restaurant · Kaçanik",
     hero_title:"Taste our<br>traditional flavor",
     hero_subtitle:"Welcome to Restaurant Katuni, where every dish has a story.",
-    hero_cta:"Contact Us",
+    hero_cta:"Reserve a Table",
     about_eyebrow:"Our Heritage", about_title:"About Us",
     about_p1:"Restaurant Katuni was born from a desire to preserve the flavors and traditions of our villages, bringing them into a modern and comfortable setting. Every recipe comes from the generations-long experience of Kaçanik's families, where cooking is an art passed down through the years.",
     about_p2:"Here, hospitality isn't just a service — it's a feeling. Every guest is treated like family, while every dish is prepared with fresh, authentic ingredients, straight from our land to your table.",
@@ -1548,65 +1608,6 @@ document.querySelectorAll('#mobile-menu a, #mobile-menu button').forEach(el=>{
   el.addEventListener('click', closeMobileMenu);
 });
 </script>
-
-<!-- BACK TO TOP -->
-<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-</button>
-
-<!-- LIGHTBOX -->
-<div id="lightbox" onclick="if(event.target===this) closeLightbox()">
-  <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
-  </button>
-  <button class="lightbox-prev" onclick="lightboxNav(-1)" aria-label="Previous">
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-  </button>
-  <img id="lightbox-img" src="" alt="Ambienti Katuni">
-  <button class="lightbox-next" onclick="lightboxNav(1)" aria-label="Next">
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-  </button>
-</div>
-
-<!-- TIME ERROR MODAL -->
-<div id="time-error-modal" class="admin-modal-overlay" onclick="if(event.target===this) closeTimeErrorModal()">
-  <div class="admin-modal-box" style="max-width:380px;text-align:center;">
-    <button class="admin-modal-close" onclick="closeTimeErrorModal()" aria-label="Close">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-    <h3 class="font-display text-xl mb-3" data-i18n="time_error_title">Ora jo e Disponueshme</h3>
-    <p class="text-sm mb-5" style="color:var(--text-muted)" data-i18n="time_error_text">Rezervimet pranohen vetëm nga ora 09:00 deri në 21:00.</p>
-    <button class="btn-primary w-full" onclick="closeTimeErrorModal()" data-i18n="time_error_button">Kuptova</button>
-  </div>
-</div>
-
-<!-- ADMIN LOGIN MODAL -->
-<div id="admin-login-modal" class="admin-modal-overlay" onclick="if(event.target===this) closeAdminLogin()">
-  <div class="admin-modal-box">
-    <button class="admin-modal-close" onclick="closeAdminLogin()" aria-label="Close">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-    <h3 class="font-display text-2xl mb-3" data-i18n="admin_login_title">Hyrja e Administratorit</h3>
-    <p class="text-sm mb-5" style="color:var(--text-muted)" data-i18n="admin_login_text">Vendosni fjalëkalimin për të parë rezervimet dhe mesazhet.</p>
-    <input type="password" id="admin-password-input" class="field mb-3" data-i18n-placeholder="admin_login_placeholder" placeholder="Fjalëkalimi" onkeydown="if(event.key==='Enter') checkAdminPassword()">
-    <p id="admin-login-error" class="text-sm hidden mb-3" style="color:#C0392B" data-i18n="admin_login_error">Fjalëkalimi është i gabuar.</p>
-    <button class="btn-primary w-full" onclick="checkAdminPassword()" data-i18n="admin_login_button">Hyr</button>
-  </div>
-</div>
-
-<!-- ADMIN PANEL MODAL -->
-<div id="admin-panel-modal" class="admin-modal-overlay" onclick="if(event.target===this) closeAdminPanel()">
-  <div class="admin-modal-box admin-panel-box">
-    <button class="admin-modal-close" onclick="closeAdminPanel()" aria-label="Close">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-    <div class="flex items-center justify-between mb-6 pr-6">
-      <h3 class="font-display text-2xl" data-i18n="admin_panel_title">Rezervimet &amp; Mesazhet</h3>
-      <button onclick="clearAdminReservations()" class="text-xs font-semibold underline" style="color:#C0392B" data-i18n="admin_clear_all">Pastro të gjitha</button>
-    </div>
-    <div id="admin-reservations-list" class="admin-reservations-list"></div>
-  </div>
-</div>
 
 </body>
 </html>
