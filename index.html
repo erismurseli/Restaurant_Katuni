@@ -198,8 +198,32 @@ html.dark .icon-sun{opacity:0;transform:rotate(-90deg) scale(.4);}
 html.dark .icon-moon{opacity:1;transform:rotate(0deg) scale(1);}
 
 /* Hero */
+.hero-frame{
+  position:relative;
+  padding:5px;
+  overflow:hidden;
+  isolation:isolate;
+  background:#0c0908;
+}
+.hero-frame::before{
+  content:'';
+  position:absolute;
+  inset:-60%;
+  background:conic-gradient(from 0deg,
+    var(--accent) 0%, var(--accent-2) 18%, #FBF1DE 32%,
+    var(--accent) 50%, var(--accent-2) 68%, #FBF1DE 82%, var(--accent) 100%);
+  animation:heroBorderSpin 9s linear infinite;
+  filter:blur(1px);
+  z-index:0;
+}
+.hero-frame > #hero{position:relative;z-index:1;}
+@keyframes heroBorderSpin{to{transform:rotate(360deg);}}
+@media(prefers-reduced-motion:reduce){
+  .hero-frame::before{animation:none;}
+}
 #hero{
   position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background-color:#15110D;
   background-image:
     radial-gradient(ellipse 90% 70% at 50% 45%, rgba(10,7,5,.86) 0%, rgba(10,7,5,.62) 38%, rgba(10,7,5,.4) 62%, rgba(10,7,5,.58) 100%),
     linear-gradient(180deg, rgba(8,6,4,.6) 0%, rgba(8,6,4,.1) 28%, rgba(8,6,4,.12) 58%, rgba(8,6,4,.72) 100%),
@@ -220,6 +244,15 @@ html.dark .icon-moon{opacity:1;transform:rotate(0deg) scale(1);}
   transition:transform .3s ease, box-shadow .3s ease;
 }
 .cta-pill:hover{transform:translateY(-3px);box-shadow:0 22px 40px -10px rgba(174,78,41,.65);}
+.cta-pill-secondary{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.08);color:#FBF3E3;border-radius:999px;
+  border:1px solid rgba(255,255,255,.55);
+  padding:15px 36px;font-weight:600;letter-spacing:.03em;
+  backdrop-filter:blur(4px);
+  transition:transform .3s ease, background .3s ease;
+}
+.cta-pill-secondary:hover{transform:translateY(-3px);background:rgba(255,255,255,.18);}
 
 /* sections */
 .section-pad{padding:96px 0;}
@@ -504,14 +537,19 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
 </nav>
 
 <!-- HERO -->
+<div class="hero-frame">
 <header id="hero">
   <div class="max-w-4xl mx-auto px-6 text-center pt-10 md:pt-20">
     <p class="eyebrow mb-7" style="color:#E9C98B;letter-spacing:.32em" data-i18n="hero_eyebrow">Restorant Tradicional · Kaçanik</p>
-    <h1 class="hero-headline text-5xl md:text-7xl leading-tight mb-8" data-i18n="hero_title">Shijoni shijen tonë<br>tradicionale</h1>
+    <h1 class="hero-headline text-4xl md:text-6xl leading-tight mb-8" data-i18n="hero_title">Shije Tradicionale</h1>
     <p class="text-base md:text-xl font-medium mb-12 max-w-lg mx-auto leading-relaxed" style="color:#F6EFE2;text-shadow:0 2px 6px rgba(0,0,0,.5)" data-i18n="hero_subtitle">Mirësevini në Restorant Katuni, ku çdo pjatë ka histori.</p>
-    <a href="#kontakto" class="cta-pill" data-i18n="hero_cta">Rezervo një Tavolinë</a>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="#kontakto" class="cta-pill" data-i18n="hero_cta">Rezervo</a>
+      <a href="#menu" class="cta-pill-secondary" data-i18n="hero_cta_menu">Shiko Menynë</a>
+    </div>
   </div>
 </header>
+</div>
 
 <!-- RRETH NESH -->
 <section id="rrethnesh" class="section-pad">
@@ -1089,13 +1127,21 @@ const translations = {
   sq: {
     nav_home:"Ballina", nav_menu:"Menu", nav_location:"Lokacioni", nav_reviews:"Vlerësimet", nav_contact:"Rezervo", nav_admin:"Admin",
     hero_eyebrow:"Restorant Tradicional · Kaçanik",
-    hero_title:"Shijoni shijen tonë<br>tradicionale",
+    hero_title:"Shije Tradicionale",
     hero_subtitle:"Mirësevini në Restorant Katuni, ku çdo pjatë ka histori.",
-    hero_cta:"Rezervo një Tavolinë",
+    hero_cta:"Rezervo", hero_cta_menu:"Shiko Menynë",
     about_eyebrow:"Trashëgimia Jonë", about_title:"Rreth Nesh",
     about_p1:"Restorant Katuni lindi nga dëshira për të ruajtur shijet dhe traditat e katundeve tona, duke i sjellë në një ambient modern e të rehatshëm. Çdo recetë vjen nga përvoja shumëvjeçare e familjeve të Kaçanikut, ku gatimi është art i trashëguar brez pas brezi.",
     about_p2:"Këtu, mikpritja nuk është thjesht shërbim — është një ndjenjë. Çdo mysafir trajtohet si pjesë e familjes, ndërsa çdo pjatë përgatitet me përbërës të freskët e autentikë, drejt nga toka jonë në tavolinën tuaj.",
     ambiance_eyebrow:"Hapësira Jonë", ambiance_title:"Ambientet Tona",
+    amb1_title:"Salla Kryesore", amb1_text:"Një ambient i ngrohtë me dru natyral dhe dritë të butë, krijuar për momente të paharrueshme me familjen dhe miqtë tuaj.",
+    amb2_title:"Tarraca e Jashtme", amb2_text:"Shijoni mbrëmjet e ngrohta në tarracën tonë, e rrethuar nga gjelbërimi dhe ajri i pastër i Kaçanikut.",
+    amb3_title:"Dekori Tradicional", amb3_text:"Çdo qoshe rrëfen një histori — elemente autentike që na lidhin me trashëgiminë dhe traditën tonë.",
+    amb4_title:"Sofra Familjare", amb4_text:"Tavolina të gjëra për mbledhje familjare dhe festa, ku çdo mysafir ndihet si në shtëpinë e vet.",
+    amb5_title:"Drita e Mbrëmjes", amb5_text:"Atmosferë intime kur bie nata, ideale për darka romantike ose mbledhje pune.",
+    amb6_title:"Ambienti për Evente", amb6_text:"Hapësirë e përshtatshme për ditëlindje, fejesa dhe çdo ngjarje të veçantë në jetën tuaj.",
+    amb7_title:"Kuzhina e Hapur", amb7_text:"Ndjeni aromën e ushqimit tradicional që përgatitet me dashuri pranë jush.",
+    amb8_title:"Mikpritja Katuni", amb8_text:"Stafi ynë është gjithmonë gati t'ju shërbejë me përkushtim dhe një buzëqeshje të sinqertë.",
     events_eyebrow:"Eventet Tuaja", events_title:"Evente &amp; Organizime",
     events_text:"Organizojmë eventet tuaja familjare dhe festive në një ambient të ngrohtë e tradicional. Na kontaktoni për rezervime.",
     events_cta:"Rezervo Eventin Tënd",
@@ -1148,13 +1194,21 @@ const translations = {
   en: {
     nav_home:"Home", nav_menu:"Menu", nav_location:"Location", nav_reviews:"Reviews", nav_contact:"Reserve", nav_admin:"Admin",
     hero_eyebrow:"Traditional Restaurant · Kaçanik",
-    hero_title:"Taste our<br>traditional flavor",
+    hero_title:"Traditional Flavor",
     hero_subtitle:"Welcome to Restaurant Katuni, where every dish has a story.",
-    hero_cta:"Reserve a Table",
+    hero_cta:"Reserve", hero_cta_menu:"View Menu",
     about_eyebrow:"Our Heritage", about_title:"About Us",
     about_p1:"Restaurant Katuni was born from a desire to preserve the flavors and traditions of our villages, bringing them into a modern and comfortable setting. Every recipe comes from the generations-long experience of Kaçanik's families, where cooking is an art passed down through the years.",
     about_p2:"Here, hospitality isn't just a service — it's a feeling. Every guest is treated like family, while every dish is prepared with fresh, authentic ingredients, straight from our land to your table.",
     ambiance_eyebrow:"Our Space", ambiance_title:"Our Ambiance",
+    amb1_title:"Main Dining Hall", amb1_text:"A warm setting with natural wood and soft lighting, made for unforgettable moments with family and friends.",
+    amb2_title:"Outdoor Terrace", amb2_text:"Enjoy warm evenings on our terrace, surrounded by the greenery and fresh air of Kaçanik.",
+    amb3_title:"Traditional Decor", amb3_text:"Every corner tells a story — authentic touches that connect us to our heritage and tradition.",
+    amb4_title:"Family Table", amb4_text:"Spacious tables for family gatherings and celebrations, where every guest feels right at home.",
+    amb5_title:"Evening Light", amb5_text:"An intimate atmosphere as night falls, perfect for romantic dinners or business gatherings.",
+    amb6_title:"Event Space", amb6_text:"A versatile space for birthdays, engagements, and every special occasion in your life.",
+    amb7_title:"Open Kitchen", amb7_text:"Experience the aroma of traditional food prepared with care right before your eyes.",
+    amb8_title:"Katuni Hospitality", amb8_text:"Our staff is always ready to serve you with dedication and a genuine smile.",
     events_eyebrow:"Your Events", events_title:"Events &amp; Gatherings",
     events_text:"We host your family events and celebrations in a warm, traditional setting. Contact us to make a reservation.",
     events_cta:"Book Your Event",
