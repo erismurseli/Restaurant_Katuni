@@ -471,10 +471,8 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
   <div class="max-w-7xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
     <a href="#hero" class="font-logo text-3xl md:text-[2.1rem] tracking-wide" style="color:var(--accent)">KATUNI</a>
 
-    <div class="hidden xl:flex items-center gap-6">
+    <div class="hidden lg:flex items-center gap-8">
       <a href="#hero" class="nav-link" data-i18n="nav_home">Ballina</a>
-      <a href="#rrethnesh" class="nav-link" data-i18n="nav_about">Rreth Nesh</a>
-      <a href="#ambientet" class="nav-link" data-i18n="nav_ambiance">Ambientet Tona</a>
       <a href="#menu" class="nav-link" data-i18n="nav_menu">Menu</a>
       <a href="#lokacioni" class="nav-link" data-i18n="nav_location">Lokacioni</a>
       <a href="#vleresimet" class="nav-link" data-i18n="nav_reviews">Vlerësimet</a>
@@ -490,26 +488,18 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
         <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
       </button>
-      <span class="hidden sm:inline-flex">
-        <button class="theme-toggle" onclick="openAdminLogin()" aria-label="Admin">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;position:static;opacity:1;color:var(--text)"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
-        </button>
-      </span>
-      <button id="mobile-menu-btn" class="xl:hidden theme-toggle" onclick="toggleMobileMenu()" aria-label="Menu" aria-expanded="false">
+      <button id="mobile-menu-btn" class="lg:hidden theme-toggle" onclick="toggleMobileMenu()" aria-label="Menu" aria-expanded="false">
         <svg id="icon-hamburger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:19px;height:19px;position:static;opacity:1;color:var(--text)"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
         <svg id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:19px;height:19px;position:static;opacity:1;color:var(--text);display:none"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
     </div>
   </div>
-  <div id="mobile-menu" class="hidden xl:hidden flex flex-col gap-4 px-6 pb-6 max-h-[80vh] overflow-y-auto" style="border-top:1px solid var(--line)">
+  <div id="mobile-menu" class="hidden lg:hidden flex flex-col gap-4 px-6 pb-6 max-h-[80vh] overflow-y-auto" style="border-top:1px solid var(--line)">
     <a href="#hero" class="nav-link pt-4" data-i18n="nav_home">Ballina</a>
-    <a href="#rrethnesh" class="nav-link" data-i18n="nav_about">Rreth Nesh</a>
-    <a href="#ambientet" class="nav-link" data-i18n="nav_ambiance">Ambientet Tona</a>
     <a href="#menu" class="nav-link" data-i18n="nav_menu">Menu</a>
     <a href="#lokacioni" class="nav-link" data-i18n="nav_location">Lokacioni</a>
     <a href="#vleresimet" class="nav-link" data-i18n="nav_reviews">Vlerësimet</a>
     <a href="#kontakto" class="nav-link" data-i18n="nav_contact">Rezervo</a>
-    <button class="nav-link text-left sm:hidden" onclick="openAdminLogin()" data-i18n="nav_admin">Admin</button>
   </div>
 </nav>
 
@@ -896,7 +886,7 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
   <div class="max-w-6xl mx-auto px-6">
     <div class="text-center mb-14 reveal">
       <p class="eyebrow mb-4" data-i18n="contact_eyebrow">Na Shkruani</p>
-      <h2 class="font-display text-3xl md:text-4xl mb-4" data-i18n="contact_title">Kontakto</h2>
+      <h2 class="font-display text-3xl md:text-4xl mb-4" data-i18n="contact_title">Rezervo</h2>
       <p class="max-w-xl mx-auto" style="color:var(--text-muted)" data-i18n="contact_subtitle">Plotësoni formularin më poshtë dhe do t'ju kontaktojmë sa më shpejt për rezervimin tuaj.</p>
     </div>
 
@@ -1017,7 +1007,7 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
       </div>
     </div>
     <div class="pt-6 flex flex-col md:flex-row justify-between items-center gap-3" style="border-top:1px solid var(--line)">
-      <p class="text-xs" style="color:var(--text-muted)">© 2026 Restaurant Katuni. <span data-i18n="footer_rights">Të gjitha të drejtat e rezervuara.</span></p>
+      <p class="text-xs" style="color:var(--text-muted)">© 2026 Restaurant Katuni. <span data-i18n="footer_rights">Të gjitha të drejtat e rezervuara.</span> · <button onclick="openAdminLogin()" class="hover:underline" style="background:none;border:none;padding:0;font:inherit;color:inherit;cursor:pointer;" data-i18n="nav_admin">Admin</button></p>
       <p class="text-xs" style="color:var(--text-muted)" data-i18n="footer_credit">Website i punuar nga Eris Murseli</p>
     </div>
   </div>
@@ -1037,7 +1027,7 @@ window.addEventListener('load', function(){
 /* ---------- TRANSLATIONS ---------- */
 const translations = {
   sq: {
-    nav_home:"Ballina", nav_about:"Rreth Nesh", nav_ambiance:"Ambientet Tona", nav_menu:"Menu", nav_location:"Lokacioni", nav_reviews:"Vlerësimet", nav_contact:"Rezervo", nav_admin:"Admin",
+    nav_home:"Ballina", nav_menu:"Menu", nav_location:"Lokacioni", nav_reviews:"Vlerësimet", nav_contact:"Rezervo", nav_admin:"Admin",
     hero_eyebrow:"Restorant Tradicional · Kaçanik",
     hero_title:"Shijoni shijen tonë<br>tradicionale",
     hero_subtitle:"Mirësevini në Restorant Katuni, ku çdo pjatë ka histori.",
@@ -1076,7 +1066,7 @@ const translations = {
     rev3_text:"Organizuam ditëlindjen e babait tim këtu — stafi ishte jashtëzakonisht i kujdesshëm dhe ushqimi tradicional i shijshëm.", rev3_name:"Driton M.",
     rev4_text:"Pula e fshatit me jufka — shije autentike e fëmijërisë. Vendi ideal për familje.", rev4_name:"Arta Sh.",
     rev5_text:"Lokacioni i bukur, ambient i pastër dhe pamje fantastike. Do kthehemi sigurisht përsëri.", rev5_name:"Blendi N.",
-    contact_eyebrow:"Na Shkruani", contact_title:"Kontakto", contact_subtitle:"Plotësoni formularin më poshtë dhe do t'ju kontaktojmë sa më shpejt për rezervimin tuaj.",
+    contact_eyebrow:"Na Shkruani", contact_title:"Rezervo", contact_subtitle:"Plotësoni formularin më poshtë dhe do t'ju kontaktojmë sa më shpejt për rezervimin tuaj.",
     policy_eyebrow:"Para se të Rezervoni", policy_title:"Politikat e Rezervimit",
     policy_1:"Rezervimi konfirmohet nga stafi ynë me telefonatë ose mesazh pasi dërgoni kërkesën.",
     policy_2:"Ju lutemi mbërrini brenda 15 minutash nga ora e rezervuar.",
@@ -1096,7 +1086,7 @@ const translations = {
     time_error_title:"Ora jo e Disponueshme", time_error_text:"Rezervimet pranohen vetëm nga ora 09:00 deri në 21:00.", time_error_button:"Kuptova"
   },
   en: {
-    nav_home:"Home", nav_about:"About Us", nav_ambiance:"Our Ambiance", nav_menu:"Menu", nav_location:"Location", nav_reviews:"Reviews", nav_contact:"Reserve", nav_admin:"Admin",
+    nav_home:"Home", nav_menu:"Menu", nav_location:"Location", nav_reviews:"Reviews", nav_contact:"Reserve", nav_admin:"Admin",
     hero_eyebrow:"Traditional Restaurant · Kaçanik",
     hero_title:"Taste our<br>traditional flavor",
     hero_subtitle:"Welcome to Restaurant Katuni, where every dish has a story.",
@@ -1135,7 +1125,7 @@ const translations = {
     rev3_text:"We organized my father's birthday here — the staff was incredibly attentive and the traditional food delicious.", rev3_name:"Driton M.",
     rev4_text:"Village chicken with noodles — an authentic taste of childhood. The ideal spot for families.", rev4_name:"Arta Sh.",
     rev5_text:"Beautiful location, clean atmosphere, and a fantastic view. We'll definitely be back.", rev5_name:"Blendi N.",
-    contact_eyebrow:"Get In Touch", contact_title:"Contact", contact_subtitle:"Fill out the form below and we'll get back to you as soon as possible about your reservation.",
+    contact_eyebrow:"Get In Touch", contact_title:"Reserve", contact_subtitle:"Fill out the form below and we'll get back to you as soon as possible about your reservation.",
     policy_eyebrow:"Before You Reserve", policy_title:"Reservation Policies",
     policy_1:"Your reservation is confirmed by our staff via phone call or message after you submit your request.",
     policy_2:"Please arrive within 15 minutes of your reserved time.",
