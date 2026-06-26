@@ -358,20 +358,25 @@ html.dark .icon-moon{opacity:1;transform:rotate(0deg) scale(1);}
   content:'';
   position:absolute;
   top:0;bottom:0;
-  width:2px;
+  width:3px;
   background:linear-gradient(to bottom,
     transparent 0%, var(--accent-2) 6%, var(--accent-2) 94%, transparent 100%);
-  box-shadow:0 0 8px var(--accent-2), 0 0 2px var(--accent-2);
-  opacity:.5;
+  box-shadow:0 0 18px var(--accent-2), 0 0 7px var(--accent-2);
+  opacity:.6;
   z-index:1;
   pointer-events:none;
-  animation:sideLinePulse 4s ease-in-out infinite alternate;
+  animation:sideLineFlicker 5s ease-in-out infinite;
 }
 .side-lines-wrap::before{left:0;}
-.side-lines-wrap::after{right:0;}
-@keyframes sideLinePulse{
-  from{opacity:.35;}
-  to{opacity:.7;}
+.side-lines-wrap::after{right:0;animation-delay:.4s;}
+@keyframes sideLineFlicker{
+  0%{opacity:.65;}
+  18%{opacity:.32;}
+  32%{opacity:.6;}
+  46%{opacity:.28;}
+  60%{opacity:.72;}
+  78%{opacity:.38;}
+  100%{opacity:.65;}
 }
 @media(prefers-reduced-motion:reduce){
   .side-lines-wrap::before, .side-lines-wrap::after{animation:none;opacity:.5;}
