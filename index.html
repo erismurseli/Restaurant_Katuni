@@ -113,28 +113,33 @@ html.preloading{overflow:hidden;}
   position:fixed;inset:0;z-index:999;
   background:#15110D;
   display:flex;align-items:center;justify-content:center;
-  transition:opacity .7s ease, visibility .7s ease;
+  transition:opacity .8s ease, visibility .8s ease;
 }
 #preloader.hide{opacity:0;visibility:hidden;pointer-events:none;}
-.preloader-inner{text-align:center;}
+.preloader-inner{text-align:center;padding:0 20px;}
 .preloader-logo{
-  display:block;font-family:'Cormorant Garamond',serif;font-size:2.4rem;
-  color:#F1E6D2;letter-spacing:.8em;opacity:0;
-  animation:preloaderFade 1.3s ease forwards;
+  display:inline-flex;justify-content:center;gap:.12em;
+  font-family:'Cormorant Garamond',serif;font-size:2.2rem;
+  color:#F1E6D2;
 }
 @media(min-width:768px){.preloader-logo{font-size:3rem;}}
+.preloader-logo .letter{
+  display:inline-block;opacity:0;
+  transform:translateY(16px) scale(.7);
+  animation:letterPop .65s cubic-bezier(.2,.8,.2,1) forwards;
+}
 .preloader-line{
   display:block;height:1px;width:0;background:#D8B468;
-  margin:20px auto 0;animation:preloaderLine 1s ease .7s forwards;
+  margin:22px auto 0;animation:preloaderLine 1.1s ease 1.9s forwards;
 }
 .preloader-tag{
   display:block;margin-top:16px;font-family:'Outfit',sans-serif;
   font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;
-  color:#B6A38A;opacity:0;animation:preloaderTagFade .8s ease 1.6s forwards;
+  color:#B6A38A;opacity:0;animation:preloaderTagFade .9s ease 3.1s forwards;
 }
-@keyframes preloaderFade{
-  0%{opacity:0;letter-spacing:1.1em;transform:translateY(10px);}
-  100%{opacity:1;letter-spacing:.5em;transform:translateY(0);}
+@keyframes letterPop{
+  0%{opacity:0;transform:translateY(16px) scale(.7);}
+  100%{opacity:1;transform:translateY(0) scale(1);}
 }
 @keyframes preloaderLine{0%{width:0;}100%{width:120px;}}
 @keyframes preloaderTagFade{0%{opacity:0;transform:translateY(6px);}100%{opacity:1;transform:translateY(0);}}
@@ -229,24 +234,54 @@ html.dark .icon-moon{opacity:1;transform:rotate(0deg) scale(1);}
   height:1px;width:64px;background:var(--accent-2);
 }
 
-/* Ambientet Tona — bento gallery + lightbox */
-.gallery-item{
-  border-radius:16px;overflow:hidden;position:relative;cursor:pointer;
-  box-shadow:var(--shadow);
+/* Ambientet Tona — synced image/text slider */
+.ambiance-slider{
+  position:relative;aspect-ratio:4/3;border-radius:18px;overflow:hidden;
+  box-shadow:var(--shadow);background:var(--bg-card);max-width:100%;
 }
-.gallery-item img{
-  width:100%;height:100%;object-fit:cover;
-  transition:transform .6s cubic-bezier(.2,.7,.3,1);
+.ambiance-slide{
+  position:absolute;inset:0;opacity:0;transform:scale(1.08);
+  transition:opacity 1.1s ease, transform 1.6s cubic-bezier(.2,.7,.3,1);
+  pointer-events:none;cursor:pointer;
 }
-.gallery-item:hover img{transform:scale(1.08);}
+.ambiance-slide.active{opacity:1;transform:scale(1);pointer-events:auto;z-index:2;}
+.ambiance-slide img{width:100%;height:100%;object-fit:cover;}
+.ambiance-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+  width:34px;height:34px;border-radius:999px;
+  background:rgba(20,14,10,.45);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);transition:background .25s;
+}
+.ambiance-arrow:hover{background:rgba(20,14,10,.7);}
+.ambiance-arrow-prev{left:10px;}
+.ambiance-arrow-next{right:10px;}
+.ambiance-dots{
+  position:absolute;bottom:12px;left:0;right:0;z-index:5;
+  display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:0 10px;
+}
+.ambiance-dot{
+  width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,.5);
+  transition:all .3s ease;flex-shrink:0;
+}
+.ambiance-dot.active{width:18px;background:#fff;}
 
-.bento-grid{grid-auto-rows:130px;grid-auto-flow:dense;}
-.bento-grid .gallery-item:nth-child(1){grid-column:span 2;grid-row:span 2;}
-.bento-grid .gallery-item:nth-child(4){grid-column:span 2;}
-@media(min-width:768px){
-  .bento-grid{grid-auto-rows:160px;}
-  .bento-grid .gallery-item:nth-child(4){grid-column:span 1;grid-row:span 2;}
-  .bento-grid .gallery-item:nth-child(6){grid-column:span 2;grid-row:span 1;}
+.ambiance-text-frame{position:relative;min-height:200px;}
+.ambiance-text-slide{
+  position:absolute;inset:0;opacity:0;transform:translateY(22px);
+  transition:opacity .7s ease, transform .7s ease;
+  pointer-events:none;
+}
+.ambiance-text-slide.active{
+  opacity:1;transform:translateY(0);pointer-events:auto;
+}
+.ambiance-counter{
+  font-family:'Outfit',sans-serif;letter-spacing:.18em;font-size:.74rem;
+  font-weight:600;color:var(--accent-2);display:block;margin-bottom:12px;
+}
+@media(max-width:767px){
+  .ambiance-slider{aspect-ratio:1/1;border-radius:16px;}
+  .ambiance-text-frame{min-height:170px;text-align:center;}
 }
 
 /* Admin modals */
@@ -259,9 +294,10 @@ html.dark .icon-moon{opacity:1;transform:rotate(0deg) scale(1);}
 .admin-modal-overlay.show{display:flex;}
 .admin-modal-box{
   background:var(--bg-card);border:1px solid var(--line);border-radius:18px;
-  padding:32px;max-width:420px;width:100%;position:relative;
+  padding:24px;max-width:420px;width:100%;position:relative;
   box-shadow:var(--shadow);max-height:85vh;overflow-y:auto;
 }
+@media(min-width:640px){.admin-modal-box{padding:32px;}}
 .admin-panel-box{max-width:640px;}
 .admin-modal-close{
   position:absolute;top:18px;right:18px;color:var(--text-muted);transition:color .2s;
@@ -415,7 +451,14 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
 <!-- PRELOADER -->
 <div id="preloader">
   <div class="preloader-inner">
-    <span class="preloader-logo">KATUNI</span>
+    <span class="preloader-logo">
+      <span class="letter" style="animation-delay:.15s">K</span>
+      <span class="letter" style="animation-delay:.35s">A</span>
+      <span class="letter" style="animation-delay:.55s">T</span>
+      <span class="letter" style="animation-delay:.75s">U</span>
+      <span class="letter" style="animation-delay:.95s">N</span>
+      <span class="letter" style="animation-delay:1.15s">I</span>
+    </span>
     <span class="preloader-line"></span>
     <span class="preloader-tag">Restorant Tradicional</span>
   </div>
@@ -428,12 +471,14 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
   <div class="max-w-7xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
     <a href="#hero" class="font-logo text-3xl md:text-[2.1rem] tracking-wide" style="color:var(--accent)">KATUNI</a>
 
-    <div class="hidden lg:flex items-center gap-9">
+    <div class="hidden xl:flex items-center gap-6">
       <a href="#hero" class="nav-link" data-i18n="nav_home">Ballina</a>
+      <a href="#rrethnesh" class="nav-link" data-i18n="nav_about">Rreth Nesh</a>
+      <a href="#ambientet" class="nav-link" data-i18n="nav_ambiance">Ambientet Tona</a>
       <a href="#menu" class="nav-link" data-i18n="nav_menu">Menu</a>
       <a href="#lokacioni" class="nav-link" data-i18n="nav_location">Lokacioni</a>
       <a href="#vleresimet" class="nav-link" data-i18n="nav_reviews">Vlerësimet</a>
-      <a href="#kontakto" class="nav-link" data-i18n="nav_contact">Kontakto</a>
+      <a href="#kontakto" class="nav-link" data-i18n="nav_contact">Rezervo</a>
     </div>
 
     <div class="flex items-center gap-3">
@@ -445,21 +490,26 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
         <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
       </button>
-      <button class="theme-toggle" onclick="openAdminLogin()" aria-label="Admin">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;position:static;opacity:1;color:var(--text)"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
-      </button>
-      <button id="mobile-menu-btn" class="lg:hidden theme-toggle" onclick="toggleMobileMenu()" aria-label="Menu" aria-expanded="false">
+      <span class="hidden sm:inline-flex">
+        <button class="theme-toggle" onclick="openAdminLogin()" aria-label="Admin">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;position:static;opacity:1;color:var(--text)"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+        </button>
+      </span>
+      <button id="mobile-menu-btn" class="xl:hidden theme-toggle" onclick="toggleMobileMenu()" aria-label="Menu" aria-expanded="false">
         <svg id="icon-hamburger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:19px;height:19px;position:static;opacity:1;color:var(--text)"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
         <svg id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:19px;height:19px;position:static;opacity:1;color:var(--text);display:none"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
     </div>
   </div>
-  <div id="mobile-menu" class="hidden lg:hidden flex flex-col gap-4 px-6 pb-6" style="border-top:1px solid var(--line)">
+  <div id="mobile-menu" class="hidden xl:hidden flex flex-col gap-4 px-6 pb-6 max-h-[80vh] overflow-y-auto" style="border-top:1px solid var(--line)">
     <a href="#hero" class="nav-link pt-4" data-i18n="nav_home">Ballina</a>
+    <a href="#rrethnesh" class="nav-link" data-i18n="nav_about">Rreth Nesh</a>
+    <a href="#ambientet" class="nav-link" data-i18n="nav_ambiance">Ambientet Tona</a>
     <a href="#menu" class="nav-link" data-i18n="nav_menu">Menu</a>
     <a href="#lokacioni" class="nav-link" data-i18n="nav_location">Lokacioni</a>
     <a href="#vleresimet" class="nav-link" data-i18n="nav_reviews">Vlerësimet</a>
-    <a href="#kontakto" class="nav-link" data-i18n="nav_contact">Kontakto</a>
+    <a href="#kontakto" class="nav-link" data-i18n="nav_contact">Rezervo</a>
+    <button class="nav-link text-left sm:hidden" onclick="openAdminLogin()" data-i18n="nav_admin">Admin</button>
   </div>
 </nav>
 
@@ -483,32 +533,97 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
       <p class="mb-4 leading-relaxed" style="color:var(--text-muted)" data-i18n="about_p1">Restorant Katuni lindi nga dëshira për të ruajtur shijet dhe traditat e katundeve tona, duke i sjellë në një ambient modern e të rehatshëm. Çdo recetë vjen nga përvoja shumëvjeçare e familjeve të Kaçanikut, ku gatimi është art i trashëguar brez pas brezi.</p>
       <p class="leading-relaxed" style="color:var(--text-muted)" data-i18n="about_p2">Këtu, mikpritja nuk është thjesht shërbim — është një ndjenjë. Çdo mysafir trajtohet si pjesë e familjes, ndërsa çdo pjatë përgatitet me përbërës të freskët e autentikë, drejt nga toka jonë në tavolinën tuaj.</p>
     </div>
-    <div class="reveal grid grid-cols-2 gap-4">
-      <img src="FototEAmbientit/Foto4.jpg" alt="Restaurant Katuni ambient" class="rounded-2xl w-full h-64 object-cover shadow-lg">
-      <img src="FototEAmbientit/Foto5.jpg" alt="Restaurant Katuni traditë" class="rounded-2xl w-full h-64 object-cover mt-10 shadow-lg">
+    <div class="reveal grid grid-cols-2 gap-3 md:gap-4">
+      <img src="FototEAmbientit/Foto4.jpg" alt="Restaurant Katuni ambient" class="rounded-2xl w-full h-44 md:h-64 object-cover shadow-lg">
+      <img src="FototEAmbientit/Foto5.jpg" alt="Restaurant Katuni traditë" class="rounded-2xl w-full h-44 md:h-64 object-cover mt-6 md:mt-10 shadow-lg">
     </div>
   </div>
 </section>
 
 <!-- AMBIENTET TONA -->
-<section id="ambientet" class="section-pad bg-alt">
+<section id="ambientet" class="section-pad bg-alt overflow-hidden">
   <div class="max-w-6xl mx-auto px-6">
     <div class="text-center mb-14 reveal">
       <p class="eyebrow mb-4" data-i18n="ambiance_eyebrow">Hapësira Jonë</p>
       <h2 class="font-display text-3xl md:text-4xl" data-i18n="ambiance_title">Ambientet Tona</h2>
     </div>
-    <div class="bento-grid grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-      <div class="gallery-item reveal" onclick="openLightbox(0)"><img src="FototEAmbientit/Foto1.jpg" alt="Ambienti 1" loading="lazy"></div>
-      <div class="gallery-item reveal" onclick="openLightbox(1)"><img src="FototEAmbientit/Foto2.jpg" alt="Ambienti 2" loading="lazy"></div>
-      <div class="gallery-item reveal" onclick="openLightbox(2)"><img src="FototEAmbientit/Foto3.jpg" alt="Ambienti 3" loading="lazy"></div>
-      <div class="gallery-item reveal" onclick="openLightbox(3)"><img src="FototEAmbientit/Foto4.jpg" alt="Ambienti 4" loading="lazy"></div>
-      <div class="gallery-item reveal hidden md:block" onclick="openLightbox(4)"><img src="FototEAmbientit/Foto5.jpg" alt="Ambienti 5" loading="lazy"></div>
-      <div class="gallery-item reveal hidden md:block" onclick="openLightbox(5)"><img src="FototEAmbientit/Foto6.jpg" alt="Ambienti 6" loading="lazy"></div>
-      <div class="gallery-item reveal hidden md:block" onclick="openLightbox(6)"><img src="FototEAmbientit/Foto7.jpg" alt="Ambienti 7" loading="lazy"></div>
-      <div class="gallery-item reveal hidden md:block" onclick="openLightbox(7)"><img src="FototEAmbientit/Foto8.jpg" alt="Ambienti 8" loading="lazy"></div>
-    </div>
-    <div class="text-center mt-6 md:hidden">
-      <button id="gallery-more-btn" onclick="showMoreGallery()" class="text-sm font-semibold underline" style="color:var(--accent)" data-i18n="ambiance_more">Shiko më shumë foto</button>
+
+    <div class="grid md:grid-cols-2 gap-8 md:gap-16 items-center reveal">
+
+      <!-- LEFT: image slider -->
+      <div class="ambiance-slider" onmouseenter="pauseAmbianceAutoplay()" onmouseleave="startAmbianceAutoplay()">
+        <div class="ambiance-slide active" onclick="openLightbox(0)"><img src="FototEAmbientit/Foto1.jpg" alt="Ambienti 1" loading="lazy"></div>
+        <div class="ambiance-slide" onclick="openLightbox(1)"><img src="FototEAmbientit/Foto2.jpg" alt="Ambienti 2" loading="lazy"></div>
+        <div class="ambiance-slide" onclick="openLightbox(2)"><img src="FototEAmbientit/Foto3.jpg" alt="Ambienti 3" loading="lazy"></div>
+        <div class="ambiance-slide" onclick="openLightbox(3)"><img src="FototEAmbientit/Foto4.jpg" alt="Ambienti 4" loading="lazy"></div>
+        <div class="ambiance-slide" onclick="openLightbox(4)"><img src="FototEAmbientit/Foto5.jpg" alt="Ambienti 5" loading="lazy"></div>
+        <div class="ambiance-slide" onclick="openLightbox(5)"><img src="FototEAmbientit/Foto6.jpg" alt="Ambienti 6" loading="lazy"></div>
+        <div class="ambiance-slide" onclick="openLightbox(6)"><img src="FototEAmbientit/Foto7.jpg" alt="Ambienti 7" loading="lazy"></div>
+        <div class="ambiance-slide" onclick="openLightbox(7)"><img src="FototEAmbientit/Foto8.jpg" alt="Ambienti 8" loading="lazy"></div>
+
+        <button class="ambiance-arrow ambiance-arrow-prev" onclick="goToAmbianceSlide(ambianceIndex - 1)" aria-label="Previous">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="ambiance-arrow ambiance-arrow-next" onclick="goToAmbianceSlide(ambianceIndex + 1)" aria-label="Next">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+
+        <div class="ambiance-dots">
+          <button class="ambiance-dot active" onclick="goToAmbianceSlide(0)" aria-label="Slide 1"></button>
+          <button class="ambiance-dot" onclick="goToAmbianceSlide(1)" aria-label="Slide 2"></button>
+          <button class="ambiance-dot" onclick="goToAmbianceSlide(2)" aria-label="Slide 3"></button>
+          <button class="ambiance-dot" onclick="goToAmbianceSlide(3)" aria-label="Slide 4"></button>
+          <button class="ambiance-dot" onclick="goToAmbianceSlide(4)" aria-label="Slide 5"></button>
+          <button class="ambiance-dot" onclick="goToAmbianceSlide(5)" aria-label="Slide 6"></button>
+          <button class="ambiance-dot" onclick="goToAmbianceSlide(6)" aria-label="Slide 7"></button>
+          <button class="ambiance-dot" onclick="goToAmbianceSlide(7)" aria-label="Slide 8"></button>
+        </div>
+      </div>
+
+      <!-- RIGHT: synced text slider -->
+      <div class="ambiance-text-frame">
+        <div class="ambiance-text-slide active">
+          <span class="ambiance-counter">01 / 08</span>
+          <h3 class="font-display text-2xl md:text-3xl mb-4" data-i18n="amb1_title">Salla Kryesore</h3>
+          <p style="color:var(--text-muted)" data-i18n="amb1_text">Një ambient i ngrohtë me dru natyral dhe dritë të butë, krijuar për momente të paharrueshme me familjen dhe miqtë tuaj.</p>
+        </div>
+        <div class="ambiance-text-slide">
+          <span class="ambiance-counter">02 / 08</span>
+          <h3 class="font-display text-2xl md:text-3xl mb-4" data-i18n="amb2_title">Tarraca e Jashtme</h3>
+          <p style="color:var(--text-muted)" data-i18n="amb2_text">Shijoni mbrëmjet e ngrohta në tarracën tonë, e rrethuar nga gjelbërimi dhe ajri i pastër i Kaçanikut.</p>
+        </div>
+        <div class="ambiance-text-slide">
+          <span class="ambiance-counter">03 / 08</span>
+          <h3 class="font-display text-2xl md:text-3xl mb-4" data-i18n="amb3_title">Dekori Tradicional</h3>
+          <p style="color:var(--text-muted)" data-i18n="amb3_text">Çdo qoshe rrëfen një histori — elemente autentike që na lidhin me trashëgiminë dhe traditën tonë.</p>
+        </div>
+        <div class="ambiance-text-slide">
+          <span class="ambiance-counter">04 / 08</span>
+          <h3 class="font-display text-2xl md:text-3xl mb-4" data-i18n="amb4_title">Sofra Familjare</h3>
+          <p style="color:var(--text-muted)" data-i18n="amb4_text">Tavolina të gjëra për mbledhje familjare dhe festa, ku çdo mysafir ndihet si në shtëpinë e vet.</p>
+        </div>
+        <div class="ambiance-text-slide">
+          <span class="ambiance-counter">05 / 08</span>
+          <h3 class="font-display text-2xl md:text-3xl mb-4" data-i18n="amb5_title">Drita e Mbrëmjes</h3>
+          <p style="color:var(--text-muted)" data-i18n="amb5_text">Atmosferë intime kur bie nata, ideale për darka romantike ose mbledhje pune.</p>
+        </div>
+        <div class="ambiance-text-slide">
+          <span class="ambiance-counter">06 / 08</span>
+          <h3 class="font-display text-2xl md:text-3xl mb-4" data-i18n="amb6_title">Ambienti për Evente</h3>
+          <p style="color:var(--text-muted)" data-i18n="amb6_text">Hapësirë e përshtatshme për ditëlindje, fejesa dhe çdo ngjarje të veçantë në jetën tuaj.</p>
+        </div>
+        <div class="ambiance-text-slide">
+          <span class="ambiance-counter">07 / 08</span>
+          <h3 class="font-display text-2xl md:text-3xl mb-4" data-i18n="amb7_title">Kuzhina e Hapur</h3>
+          <p style="color:var(--text-muted)" data-i18n="amb7_text">Ndjeni aromën e ushqimit tradicional që përgatitet me dashuri pranë jush.</p>
+        </div>
+        <div class="ambiance-text-slide">
+          <span class="ambiance-counter">08 / 08</span>
+          <h3 class="font-display text-2xl md:text-3xl mb-4" data-i18n="amb8_title">Mikpritja Katuni</h3>
+          <p style="color:var(--text-muted)" data-i18n="amb8_text">Stafi ynë është gjithmonë gati t'ju shërbejë me përkushtim dhe një buzëqeshje të sinqertë.</p>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -529,13 +644,45 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
   </div>
 </section>
 
-<!-- KONTAKT TEASER (fund i Ballinës) -->
-<section class="section-pad bg-alt">
-  <div class="max-w-3xl mx-auto px-6 text-center reveal">
-    <p class="eyebrow mb-4" data-i18n="cta_eyebrow">Na Kontaktoni</p>
-    <h2 class="font-display text-3xl md:text-4xl mb-5" data-i18n="cta_title">Gati për një Mbrëmje të Paharrueshme?</h2>
-    <p class="mb-8" style="color:var(--text-muted)" data-i18n="cta_text">Rezervoni tavolinën tuaj tani dhe na lejoni t'ju shërbejmë me shijet tona tradicionale.</p>
-    <a href="#kontakto" class="cta-pill" data-i18n="cta_button">Bëj Rezervimin</a>
+<!-- KONTAKT I SHPEJTË (fund i Ballinës) -->
+<section id="na-kontaktoni" class="section-pad bg-alt">
+  <div class="max-w-xl mx-auto px-6">
+    <div class="text-center mb-10 reveal">
+      <p class="eyebrow mb-4" data-i18n="cta_eyebrow">Na Kontaktoni</p>
+      <h2 class="font-display text-3xl md:text-4xl mb-5" data-i18n="cta_title">Keni një Pyetje për Ne?</h2>
+      <p style="color:var(--text-muted)" data-i18n="cta_text">Na shkruani dhe ekipi ynë do t'ju përgjigjet sa më shpejt. Për rezervim tavoline, përdorni butonin "Rezervo".</p>
+    </div>
+
+    <form id="quick-contact-form" class="card p-7 md:p-10 space-y-5 reveal" novalidate>
+      <div class="grid md:grid-cols-2 gap-5">
+        <div>
+          <label class="block text-sm font-medium mb-2" data-i18n="contact_fname">Emri</label>
+          <input required type="text" id="qf-name" class="field" data-i18n-placeholder="contact_fname_ph" placeholder="Shkruani emrin tuaj">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2" data-i18n="contact_lname">Mbiemri</label>
+          <input required type="text" id="qf-lastname" class="field" data-i18n-placeholder="contact_lname_ph" placeholder="Shkruani mbiemrin tuaj">
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-2" data-i18n="contact_phone">Nr. i Telefonit</label>
+        <input required type="tel" id="qf-phone" class="field" data-i18n-placeholder="contact_phone_ph" placeholder="+383 4X XXX XXX">
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-2" data-i18n="contact_msg">Mesazhi</label>
+        <textarea required id="qf-message" rows="4" class="field" data-i18n-placeholder="quick_msg_ph" placeholder="Si mund t'ju ndihmojmë?"></textarea>
+      </div>
+      <p id="quick-form-error" class="text-sm hidden" style="color:#C0392B" data-i18n="contact_error">Ju lutem plotësoni të gjitha fushat.</p>
+
+      <div class="pt-2">
+        <button type="submit" class="btn-primary w-full" data-i18n="contact_send">Dërgo Mesazhin</button>
+      </div>
+
+      <div id="quick-send-options" class="hidden pt-4 grid md:grid-cols-2 gap-4">
+        <a id="quick-whatsapp-link" target="_blank" rel="noopener" class="btn-primary text-center" style="background:#25D366" data-i18n="contact_whatsapp">Dërgo në WhatsApp</a>
+        <a id="quick-viber-link" class="btn-primary text-center" style="background:#7360F2" data-i18n="contact_viber">Dërgo në Viber</a>
+      </div>
+    </form>
   </div>
 </section>
 
@@ -807,7 +954,7 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
           </div>
           <div>
             <label class="block text-sm font-medium mb-2" data-i18n="contact_time">Ora</label>
-            <input required type="time" id="f-time" class="field">
+            <input required type="time" id="f-time" class="field" min="09:00" max="21:00">
           </div>
           <div>
             <label class="block text-sm font-medium mb-2" data-i18n="contact_persons">Numri i Personave</label>
@@ -860,7 +1007,7 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
           <li><a href="#menu" class="hover:underline" data-i18n="nav_menu">Menu</a></li>
           <li><a href="#lokacioni" class="hover:underline" data-i18n="nav_location">Lokacioni</a></li>
           <li><a href="#vleresimet" class="hover:underline" data-i18n="nav_reviews">Vlerësimet</a></li>
-          <li><a href="#kontakto" class="hover:underline" data-i18n="nav_contact">Kontakto</a></li>
+          <li><a href="#kontakto" class="hover:underline" data-i18n="nav_contact">Rezervo</a></li>
         </ul>
       </div>
       <div>
@@ -883,14 +1030,14 @@ window.addEventListener('load', function(){
     const pre = document.getElementById('preloader');
     document.documentElement.classList.remove('preloading');
     pre.classList.add('hide');
-    setTimeout(function(){ pre.remove(); }, 750);
-  }, 1100);
+    setTimeout(function(){ pre.remove(); }, 800);
+  }, 4300);
 });
 
 /* ---------- TRANSLATIONS ---------- */
 const translations = {
   sq: {
-    nav_home:"Ballina", nav_menu:"Menu", nav_location:"Lokacioni", nav_reviews:"Vlerësimet", nav_contact:"Kontakto",
+    nav_home:"Ballina", nav_about:"Rreth Nesh", nav_ambiance:"Ambientet Tona", nav_menu:"Menu", nav_location:"Lokacioni", nav_reviews:"Vlerësimet", nav_contact:"Rezervo", nav_admin:"Admin",
     hero_eyebrow:"Restorant Tradicional · Kaçanik",
     hero_title:"Shijoni shijen tonë<br>tradicionale",
     hero_subtitle:"Mirësevini në Restorant Katuni, ku çdo pjatë ka histori.",
@@ -898,12 +1045,12 @@ const translations = {
     about_eyebrow:"Trashëgimia Jonë", about_title:"Rreth Nesh",
     about_p1:"Restorant Katuni lindi nga dëshira për të ruajtur shijet dhe traditat e katundeve tona, duke i sjellë në një ambient modern e të rehatshëm. Çdo recetë vjen nga përvoja shumëvjeçare e familjeve të Kaçanikut, ku gatimi është art i trashëguar brez pas brezi.",
     about_p2:"Këtu, mikpritja nuk është thjesht shërbim — është një ndjenjë. Çdo mysafir trajtohet si pjesë e familjes, ndërsa çdo pjatë përgatitet me përbërës të freskët e autentikë, drejt nga toka jonë në tavolinën tuaj.",
-    ambiance_eyebrow:"Hapësira Jonë", ambiance_title:"Ambientet Tona", ambiance_more:"Shiko më shumë foto",
+    ambiance_eyebrow:"Hapësira Jonë", ambiance_title:"Ambientet Tona",
     events_eyebrow:"Eventet Tuaja", events_title:"Evente &amp; Organizime",
     events_text:"Organizojmë eventet tuaja familjare dhe festive në një ambient të ngrohtë e tradicional. Na kontaktoni për rezervime.",
     events_cta:"Rezervo Eventin Tënd",
-    cta_eyebrow:"Na Kontaktoni", cta_title:"Gati për një Mbrëmje të Paharrueshme?",
-    cta_text:"Rezervoni tavolinën tuaj tani dhe na lejoni t'ju shërbejmë me shijet tona tradicionale.", cta_button:"Bëj Rezervimin",
+    cta_eyebrow:"Na Kontaktoni", cta_title:"Keni një Pyetje për Ne?",
+    cta_text:"Na shkruani dhe ekipi ynë do t'ju përgjigjet sa më shpejt. Për rezervim tavoline, përdorni butonin \"Rezervo\".", quick_msg_ph:"Si mund t'ju ndihmojmë?",
     menu_eyebrow:"Çka Shërbejmë", menu_title:"Menyja",
     menu_tab_main:"Pjata Kryesore", menu_tab_trad:"Ushqime Tradicionale", menu_tab_village:"Pulë Fshati", menu_tab_fish:"Pjata me Peshk", menu_tab_drinks:"Pijet",
     m_salate_pule:"Sallatë Pule", m_file_pule:"File Pule", m_file_pule_d:"Patate, sallatë e gjelbërt, perime",
@@ -945,10 +1092,11 @@ const translations = {
     footer_links:"Lidhjet", footer_hours_title:"Orari", footer_rights:"Të gjitha të drejtat e rezervuara.", footer_credit:"Website i punuar nga Eris Murseli",
     admin_login_title:"Hyrja e Administratorit", admin_login_text:"Vendosni fjalëkalimin për të parë rezervimet dhe mesazhet.",
     admin_login_placeholder:"Fjalëkalimi", admin_login_error:"Fjalëkalimi është i gabuar.", admin_login_button:"Hyr",
-    admin_panel_title:"Rezervimet & Mesazhet", admin_clear_all:"Pastro të gjitha"
+    admin_panel_title:"Rezervimet & Mesazhet", admin_clear_all:"Pastro të gjitha",
+    time_error_title:"Ora jo e Disponueshme", time_error_text:"Rezervimet pranohen vetëm nga ora 09:00 deri në 21:00.", time_error_button:"Kuptova"
   },
   en: {
-    nav_home:"Home", nav_menu:"Menu", nav_location:"Location", nav_reviews:"Reviews", nav_contact:"Contact",
+    nav_home:"Home", nav_about:"About Us", nav_ambiance:"Our Ambiance", nav_menu:"Menu", nav_location:"Location", nav_reviews:"Reviews", nav_contact:"Reserve", nav_admin:"Admin",
     hero_eyebrow:"Traditional Restaurant · Kaçanik",
     hero_title:"Taste our<br>traditional flavor",
     hero_subtitle:"Welcome to Restaurant Katuni, where every dish has a story.",
@@ -956,12 +1104,12 @@ const translations = {
     about_eyebrow:"Our Heritage", about_title:"About Us",
     about_p1:"Restaurant Katuni was born from a desire to preserve the flavors and traditions of our villages, bringing them into a modern and comfortable setting. Every recipe comes from the generations-long experience of Kaçanik's families, where cooking is an art passed down through the years.",
     about_p2:"Here, hospitality isn't just a service — it's a feeling. Every guest is treated like family, while every dish is prepared with fresh, authentic ingredients, straight from our land to your table.",
-    ambiance_eyebrow:"Our Space", ambiance_title:"Our Ambiance", ambiance_more:"See more photos",
+    ambiance_eyebrow:"Our Space", ambiance_title:"Our Ambiance",
     events_eyebrow:"Your Events", events_title:"Events &amp; Gatherings",
     events_text:"We host your family events and celebrations in a warm, traditional setting. Contact us to make a reservation.",
     events_cta:"Book Your Event",
-    cta_eyebrow:"Get In Touch", cta_title:"Ready for an Unforgettable Evening?",
-    cta_text:"Reserve your table now and let us serve you our traditional flavors.", cta_button:"Make a Reservation",
+    cta_eyebrow:"Get In Touch", cta_title:"Have a Question for Us?",
+    cta_text:"Send us a message and our team will get back to you shortly. For table reservations, use the \"Reserve\" button.", quick_msg_ph:"How can we help you?",
     menu_eyebrow:"What We Serve", menu_title:"Menu",
     menu_tab_main:"Main Dishes", menu_tab_trad:"Traditional Food", menu_tab_village:"Village Chicken", menu_tab_fish:"Fish Dishes", menu_tab_drinks:"Drinks",
     m_salate_pule:"Chicken Salad", m_file_pule:"Chicken Fillet", m_file_pule_d:"Fries, green salad, vegetables",
@@ -1003,7 +1151,8 @@ const translations = {
     footer_links:"Links", footer_hours_title:"Hours", footer_rights:"All rights reserved.", footer_credit:"Website built by Eris Murseli",
     admin_login_title:"Admin Login", admin_login_text:"Enter the password to view reservations and messages.",
     admin_login_placeholder:"Password", admin_login_error:"Incorrect password.", admin_login_button:"Log In",
-    admin_panel_title:"Reservations & Messages", admin_clear_all:"Clear All"
+    admin_panel_title:"Reservations & Messages", admin_clear_all:"Clear All",
+    time_error_title:"Time Not Available", time_error_text:"Reservations are only accepted between 09:00 and 21:00.", time_error_button:"Got It"
   }
 };
 
@@ -1094,6 +1243,23 @@ function formatDateDMY(isoDate){
   return `${d}/${m}/${y}`;
 }
 
+function isTimeWithinHours(t){
+  if(!t) return false;
+  const [h, m] = t.split(':').map(Number);
+  const minutes = h * 60 + m;
+  return minutes >= 9 * 60 && minutes <= 21 * 60;
+}
+
+const timeInput = document.getElementById('f-time');
+if(timeInput){
+  timeInput.addEventListener('change', function(){
+    if(this.value && !isTimeWithinHours(this.value)){
+      showTimeErrorModal();
+      this.value = '';
+    }
+  });
+}
+
 document.getElementById('contact-form').addEventListener('submit', function(e){
   e.preventDefault();
   const name = document.getElementById('f-name').value.trim();
@@ -1111,6 +1277,11 @@ document.getElementById('contact-form').addEventListener('submit', function(e){
   }
   errorEl.classList.add('hidden');
 
+  if(!isTimeWithinHours(time)){
+    showTimeErrorModal();
+    return;
+  }
+
   const lang = document.documentElement.lang || 'sq';
   const dateFormatted = formatDateDMY(date);
   const template = lang === 'en'
@@ -1124,6 +1295,44 @@ document.getElementById('contact-form').addEventListener('submit', function(e){
 
   saveReservation({
     name, lastname, phone, date: dateFormatted, time, persons, message,
+    submittedAt: new Date().toLocaleString('sq-AL')
+  });
+});
+
+function showTimeErrorModal(){
+  document.getElementById('time-error-modal').classList.add('show');
+}
+function closeTimeErrorModal(){
+  document.getElementById('time-error-modal').classList.remove('show');
+}
+
+/* ---------- QUICK CONTACT FORM (Ballina) ---------- */
+document.getElementById('quick-contact-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('qf-name').value.trim();
+  const lastname = document.getElementById('qf-lastname').value.trim();
+  const phone = document.getElementById('qf-phone').value.trim();
+  const message = document.getElementById('qf-message').value.trim();
+  const errorEl = document.getElementById('quick-form-error');
+
+  if(!name || !lastname || !phone || !message){
+    errorEl.classList.remove('hidden');
+    return;
+  }
+  errorEl.classList.add('hidden');
+
+  const lang = document.documentElement.lang || 'sq';
+  const template = lang === 'en'
+    ? `Message from: ${name} ${lastname}.\nPhone: ${phone}\nMessage: ${message}`
+    : `Mesazh nga: ${name} ${lastname}.\nTelefoni: ${phone}\nMesazhi: ${message}`;
+
+  const encoded = encodeURIComponent(template);
+  document.getElementById('quick-whatsapp-link').href = `https://wa.me/38346183183?text=${encoded}`;
+  document.getElementById('quick-viber-link').href = `viber://chat?number=%2B38346183183&text=${encoded}`;
+  document.getElementById('quick-send-options').classList.remove('hidden');
+
+  saveMessage({
+    name, lastname, phone, message,
     submittedAt: new Date().toLocaleString('sq-AL')
   });
 });
@@ -1165,31 +1374,60 @@ function saveReservation(entry){
   list.unshift(entry);
   localStorage.setItem('katuni-reservations', JSON.stringify(list));
 }
+function getMessages(){
+  try{
+    return JSON.parse(localStorage.getItem('katuni-messages') || '[]');
+  }catch(e){ return []; }
+}
+function saveMessage(entry){
+  const list = getMessages();
+  list.unshift(entry);
+  localStorage.setItem('katuni-messages', JSON.stringify(list));
+}
 function escapeHtml(str){
   const div = document.createElement('div');
   div.textContent = str ?? '';
   return div.innerHTML;
 }
 function renderAdminReservations(){
-  const list = getReservations();
+  const reservations = getReservations();
+  const messages = getMessages();
   const container = document.getElementById('admin-reservations-list');
-  if(list.length === 0){
-    container.innerHTML = '<p class="admin-empty-state">Ende nuk ka rezervime apo mesazhe.</p>';
-    return;
-  }
-  container.innerHTML = list.map(r => `
-    <div class="admin-reservation-card">
-      <div class="res-name">${escapeHtml(r.name)} ${escapeHtml(r.lastname)}</div>
-      <div class="res-meta">${escapeHtml(r.date)} · ${escapeHtml(r.time)} · ${escapeHtml(r.persons)} persona</div>
-      <div class="res-meta">📞 ${escapeHtml(r.phone)}</div>
-      <div style="margin-top:8px;">${escapeHtml(r.message)}</div>
-      <div class="res-meta" style="margin-top:6px;">${escapeHtml(r.submittedAt)}</div>
-    </div>
-  `).join('');
+
+  const reservationsHtml = reservations.length
+    ? reservations.map(r => `
+        <div class="admin-reservation-card">
+          <div class="res-name">${escapeHtml(r.name)} ${escapeHtml(r.lastname)}</div>
+          <div class="res-meta">${escapeHtml(r.date)} · ${escapeHtml(r.time)} · ${escapeHtml(r.persons)} persona</div>
+          <div class="res-meta">📞 ${escapeHtml(r.phone)}</div>
+          <div style="margin-top:8px;">${escapeHtml(r.message)}</div>
+          <div class="res-meta" style="margin-top:6px;">${escapeHtml(r.submittedAt)}</div>
+        </div>
+      `).join('')
+    : '<p class="admin-empty-state">Ende nuk ka rezervime.</p>';
+
+  const messagesHtml = messages.length
+    ? messages.map(m => `
+        <div class="admin-reservation-card">
+          <div class="res-name">${escapeHtml(m.name)} ${escapeHtml(m.lastname)}</div>
+          <div class="res-meta">📞 ${escapeHtml(m.phone)}</div>
+          <div style="margin-top:8px;">${escapeHtml(m.message)}</div>
+          <div class="res-meta" style="margin-top:6px;">${escapeHtml(m.submittedAt)}</div>
+        </div>
+      `).join('')
+    : '<p class="admin-empty-state">Ende nuk ka mesazhe.</p>';
+
+  container.innerHTML = `
+    <h4 class="font-display text-lg mb-3" style="color:var(--accent)">Rezervimet</h4>
+    <div class="admin-reservations-list mb-8">${reservationsHtml}</div>
+    <h4 class="font-display text-lg mb-3" style="color:var(--accent)">Mesazhet</h4>
+    <div class="admin-reservations-list">${messagesHtml}</div>
+  `;
 }
 function clearAdminReservations(){
-  if(confirm('A jeni i sigurt që doni t\'i fshini të gjitha rezervimet?')){
+  if(confirm('A jeni i sigurt që doni t\'i fshini të gjitha rezervimet dhe mesazhet?')){
     localStorage.removeItem('katuni-reservations');
+    localStorage.removeItem('katuni-messages');
     renderAdminReservations();
   }
 }
@@ -1197,6 +1435,7 @@ document.addEventListener('keydown', (e)=>{
   if(e.key === 'Escape'){
     closeAdminLogin();
     closeAdminPanel();
+    closeTimeErrorModal();
   }
 });
 
@@ -1255,15 +1494,44 @@ document.addEventListener('keydown', (e)=>{
   if(e.key === 'ArrowLeft') lightboxNav(-1);
 });
 
-/* ---------- GALLERY SHOW MORE (mobile) ---------- */
-function showMoreGallery(){
-  document.querySelectorAll('#ambientet .gallery-item.hidden').forEach(el=>{
-    el.classList.remove('hidden');
-    el.classList.add('reveal','in');
-  });
-  const btn = document.getElementById('gallery-more-btn');
-  if(btn) btn.style.display = 'none';
+/* ---------- AMBIANCE SLIDER (image + synced text) ---------- */
+let ambianceIndex = 0;
+let ambianceTimer = null;
+
+function setAmbianceSlide(i){
+  const slides = document.querySelectorAll('.ambiance-slide');
+  const texts = document.querySelectorAll('.ambiance-text-slide');
+  const dots = document.querySelectorAll('.ambiance-dot');
+  const total = slides.length;
+  if(!total) return;
+  ambianceIndex = (i + total) % total;
+
+  slides.forEach((s, idx) => s.classList.toggle('active', idx === ambianceIndex));
+  texts.forEach((t, idx) => t.classList.toggle('active', idx === ambianceIndex));
+  dots.forEach((d, idx) => d.classList.toggle('active', idx === ambianceIndex));
 }
+
+function goToAmbianceSlide(i){
+  setAmbianceSlide(i);
+  restartAmbianceAutoplay();
+}
+
+function startAmbianceAutoplay(){
+  if(ambianceTimer) return;
+  ambianceTimer = setInterval(() => setAmbianceSlide(ambianceIndex + 1), 4800);
+}
+
+function pauseAmbianceAutoplay(){
+  clearInterval(ambianceTimer);
+  ambianceTimer = null;
+}
+
+function restartAmbianceAutoplay(){
+  pauseAmbianceAutoplay();
+  startAmbianceAutoplay();
+}
+
+startAmbianceAutoplay();
 
 function toggleMobileMenu(){
   const menu = document.getElementById('mobile-menu');
@@ -1280,8 +1548,8 @@ function closeMobileMenu(){
   document.getElementById('icon-close').style.display = 'none';
   document.getElementById('mobile-menu-btn').setAttribute('aria-expanded', 'false');
 }
-document.querySelectorAll('#mobile-menu a').forEach(a=>{
-  a.addEventListener('click', closeMobileMenu);
+document.querySelectorAll('#mobile-menu a, #mobile-menu button').forEach(el=>{
+  el.addEventListener('click', closeMobileMenu);
 });
 </script>
 
@@ -1302,6 +1570,18 @@ document.querySelectorAll('#mobile-menu a').forEach(a=>{
   <button class="lightbox-next" onclick="lightboxNav(1)" aria-label="Next">
     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
   </button>
+</div>
+
+<!-- TIME ERROR MODAL -->
+<div id="time-error-modal" class="admin-modal-overlay" onclick="if(event.target===this) closeTimeErrorModal()">
+  <div class="admin-modal-box" style="max-width:380px;text-align:center;">
+    <button class="admin-modal-close" onclick="closeTimeErrorModal()" aria-label="Close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <h3 class="font-display text-xl mb-3" data-i18n="time_error_title">Ora jo e Disponueshme</h3>
+    <p class="text-sm mb-5" style="color:var(--text-muted)" data-i18n="time_error_text">Rezervimet pranohen vetëm nga ora 09:00 deri në 21:00.</p>
+    <button class="btn-primary w-full" onclick="closeTimeErrorModal()" data-i18n="time_error_button">Kuptova</button>
+  </div>
 </div>
 
 <!-- ADMIN LOGIN MODAL -->
