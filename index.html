@@ -11,7 +11,7 @@
 <meta property="og:title" content="Restaurant Katuni — Kaçanik">
 <meta property="og:description" content="Shijoni shijen tonë tradicionale. Restorant Katuni në Kaçanik.">
 <meta property="og:type" content="restaurant">
-<meta property="og:image" content="Background/Background.jpg">
+<meta property="og:image" content="Logo/Logo.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
   "@context": "https://schema.org",
   "@type": "Restaurant",
   "name": "Restaurant Katuni",
-  "image": "Background/Background.jpg",
+  "image": "Logo/Logo.jpg",
   "telephone": "+38346183183",
   "servesCuisine": "Traditional Kosovar",
   "priceRange": "5€-60€",
@@ -117,6 +117,15 @@ html.preloading{overflow:hidden;}
 }
 #preloader.hide{opacity:0;visibility:hidden;pointer-events:none;}
 .preloader-inner{text-align:center;padding:0 20px;}
+.preloader-logo-img{
+  display:block;margin:0 auto 20px;
+  width:78px;height:78px;object-fit:contain;
+  border-radius:14px;
+  opacity:0;
+  transform:scale(.7) translateY(8px);
+  animation:preloaderLogoIn .9s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@media(min-width:768px){.preloader-logo-img{width:96px;height:96px;}}
 .preloader-logo{
   display:inline-flex;justify-content:center;gap:.12em;
   font-family:'Cormorant Garamond',serif;font-size:2.2rem;
@@ -130,12 +139,16 @@ html.preloading{overflow:hidden;}
 }
 .preloader-line{
   display:block;height:1px;width:0;background:#D8B468;
-  margin:22px auto 0;animation:preloaderLine 1.1s ease 1.9s forwards;
+  margin:22px auto 0;animation:preloaderLine 1.1s ease 2.75s forwards;
 }
 .preloader-tag{
   display:block;margin-top:16px;font-family:'Outfit',sans-serif;
   font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;
-  color:#B6A38A;opacity:0;animation:preloaderTagFade .9s ease 3.1s forwards;
+  color:#B6A38A;opacity:0;animation:preloaderTagFade .9s ease 3.95s forwards;
+}
+@keyframes preloaderLogoIn{
+  0%{opacity:0;transform:scale(.7) translateY(8px);}
+  100%{opacity:1;transform:scale(1) translateY(0);}
 }
 @keyframes letterPop{
   0%{opacity:0;transform:translateY(16px) scale(.7);}
@@ -231,12 +244,21 @@ html.dark .icon-moon{opacity:1;transform:rotate(0deg) scale(1);}
 #hero{
   position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;
   background-color:#15110D;
+  overflow:hidden;
+}
+.hero-bg-video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  z-index:0;
+}
+.hero-overlay{
+  position:absolute;inset:0;z-index:1;
   background-image:
     radial-gradient(ellipse 90% 70% at 50% 45%, rgba(10,7,5,.86) 0%, rgba(10,7,5,.62) 38%, rgba(10,7,5,.4) 62%, rgba(10,7,5,.58) 100%),
-    linear-gradient(180deg, rgba(8,6,4,.6) 0%, rgba(8,6,4,.1) 28%, rgba(8,6,4,.12) 58%, rgba(8,6,4,.72) 100%),
-    url('Background/Background.jpg');
-  background-size:cover;background-position:center;
+    linear-gradient(180deg, rgba(8,6,4,.6) 0%, rgba(8,6,4,.1) 28%, rgba(8,6,4,.12) 58%, rgba(8,6,4,.72) 100%);
 }
+.hero-content-wrap{position:relative;z-index:2;}
 .hero-headline{
   font-family:'Playfair Display',serif;
   font-style:italic;
@@ -522,13 +544,14 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
 <!-- PRELOADER -->
 <div id="preloader">
   <div class="preloader-inner">
+    <img src="Logo/Logo.jpg" alt="Restaurant Katuni" class="preloader-logo-img">
     <span class="preloader-logo">
-      <span class="letter" style="animation-delay:.15s">K</span>
-      <span class="letter" style="animation-delay:.35s">A</span>
-      <span class="letter" style="animation-delay:.55s">T</span>
-      <span class="letter" style="animation-delay:.75s">U</span>
-      <span class="letter" style="animation-delay:.95s">N</span>
-      <span class="letter" style="animation-delay:1.15s">I</span>
+      <span class="letter" style="animation-delay:1.0s">K</span>
+      <span class="letter" style="animation-delay:1.2s">A</span>
+      <span class="letter" style="animation-delay:1.4s">T</span>
+      <span class="letter" style="animation-delay:1.6s">U</span>
+      <span class="letter" style="animation-delay:1.8s">N</span>
+      <span class="letter" style="animation-delay:2.0s">I</span>
     </span>
     <span class="preloader-line"></span>
     <span class="preloader-tag">Restorant Tradicional</span>
@@ -540,7 +563,9 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
 <!-- NAVBAR -->
 <nav id="navbar" class="fixed top-0 left-0 w-full z-50">
   <div class="max-w-7xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
-    <a href="#hero" class="font-logo text-3xl md:text-[2.1rem] tracking-wide" style="color:var(--accent)">KATUNI</a>
+    <a href="#hero" class="flex items-center" aria-label="Restaurant Katuni">
+      <img src="Logo/Logo.jpg" alt="Restaurant Katuni" class="h-10 md:h-12 w-auto object-contain rounded-md">
+    </a>
 
     <div class="hidden lg:flex items-center gap-8">
       <a href="#hero" class="nav-link" data-i18n="nav_home">Ballina</a>
@@ -581,7 +606,11 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
   <rect class="hero-border-comet" x="1" y="1" width="0" height="0"></rect>
 </svg>
 <header id="hero">
-  <div class="max-w-4xl mx-auto px-6 text-center pt-10 md:pt-20">
+  <video class="hero-bg-video" id="hero-bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="Background/background.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
+  <div class="hero-content-wrap max-w-4xl mx-auto px-6 text-center pt-10 md:pt-20">
     <p class="eyebrow mb-7" style="color:#E9C98B;letter-spacing:.32em" data-i18n="hero_eyebrow">Restaurant Katuni Kaçanik</p>
     <h1 class="hero-headline text-4xl md:text-6xl leading-tight mb-8" data-i18n="hero_title">Shije Tradicionale</h1>
     <p class="text-base md:text-xl font-medium mb-12 max-w-lg mx-auto leading-relaxed" style="color:#F6EFE2;text-shadow:0 2px 6px rgba(0,0,0,.5)" data-i18n="hero_subtitle">Mirësevini në Restorant Katuni, ku çdo pjatë ka histori.</p>
@@ -604,8 +633,8 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
       <p class="leading-relaxed" style="color:var(--text-muted)" data-i18n="about_p2">Këtu, mikpritja nuk është thjesht shërbim — është një ndjenjë. Çdo mysafir trajtohet si pjesë e familjes, ndërsa çdo pjatë përgatitet me përbërës të freskët e autentikë, drejt nga toka jonë në tavolinën tuaj.</p>
     </div>
     <div class="reveal grid grid-cols-2 gap-3 md:gap-4">
-      <img src="FototEAmbientit/Foto4.jpg" alt="Restaurant Katuni ambient" class="rounded-2xl w-full h-44 md:h-64 object-cover shadow-lg">
-      <img src="FototEAmbientit/Foto5.jpg" alt="Restaurant Katuni traditë" class="rounded-2xl w-full h-44 md:h-64 object-cover mt-6 md:mt-10 shadow-lg">
+      <img src="RrethNesh/RrethNesh1.jpg" alt="Restaurant Katuni ambient" class="rounded-2xl w-full h-44 md:h-64 object-cover shadow-lg">
+      <img src="RrethNesh/RrethNesh2.jpg" alt="Restaurant Katuni traditë" class="rounded-2xl w-full h-44 md:h-64 object-cover mt-6 md:mt-10 shadow-lg">
     </div>
   </div>
 </section>
@@ -1027,7 +1056,7 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
           </div>
           <div>
             <label class="block text-sm font-medium mb-2" data-i18n="contact_time">Ora</label>
-            <input required type="time" id="f-time" class="field" min="09:00" max="21:00">
+            <input required type="time" id="f-time" class="field" min="09:00" max="20:00">
           </div>
           <div>
             <label class="block text-sm font-medium mb-2" data-i18n="contact_persons">Numri i Personave</label>
@@ -1149,8 +1178,20 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
     <h3 class="font-display text-xl mb-3" data-i18n="time_error_title">Ora jo e Disponueshme</h3>
-    <p class="text-sm mb-5" style="color:var(--text-muted)" data-i18n="time_error_text">Rezervimet pranohen vetëm nga ora 09:00 deri në 21:00.</p>
+    <p class="text-sm mb-5" style="color:var(--text-muted)" data-i18n="time_error_text">Rezervimet pranohen vetëm nga ora 09:00 deri në 20:00.</p>
     <button class="btn-primary w-full" onclick="closeTimeErrorModal()" data-i18n="time_error_button">Kuptova</button>
+  </div>
+</div>
+
+<!-- DATE ERROR MODAL -->
+<div id="date-error-modal" class="admin-modal-overlay" onclick="if(event.target===this) closeDateErrorModal()">
+  <div class="admin-modal-box" style="max-width:380px;text-align:center;">
+    <button class="admin-modal-close" onclick="closeDateErrorModal()" aria-label="Close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <h3 class="font-display text-xl mb-3" data-i18n="date_error_title">Data jo e Disponueshme</h3>
+    <p class="text-sm mb-5" style="color:var(--text-muted)" data-i18n="date_error_text">Rezervimet bëhen vetëm nga sot deri 10 ditë në të ardhmen. Ju lutem zgjidhni një datë tjetër.</p>
+    <button class="btn-primary w-full" onclick="closeDateErrorModal()" data-i18n="date_error_button">Kuptova</button>
   </div>
 </div>
 
@@ -1184,6 +1225,18 @@ footer{background:var(--bg-alt);border-top:1px solid var(--line);}
 
 
 <script>
+/* ---------- HERO BACKGROUND VIDEO (diagnostics only) ---------- */
+(function setupHeroVideo(){
+  const video = document.getElementById('hero-bg-video');
+  if(!video) return;
+  video.addEventListener('error', function(){
+    console.warn('Hero background video failed to load. Check that the file exists at: Background/background.mp4 (relative to the HTML file).');
+  }, true);
+  video.addEventListener('canplay', function(){
+    video.play().catch(function(){ /* autoplay restrictions; safe to ignore since video is muted */ });
+  }, {once:true});
+})();
+
 /* ---------- HERO ANIMATED BORDER ---------- */
 function setupHeroBorder(){
   const frame = document.querySelector('.hero-frame');
@@ -1229,7 +1282,7 @@ window.addEventListener('load', function(){
     document.documentElement.classList.remove('preloading');
     pre.classList.add('hide');
     setTimeout(function(){ pre.remove(); }, 800);
-  }, 4300);
+  }, 5200);
 });
 
 /* ---------- TRANSLATIONS ---------- */
@@ -1306,7 +1359,8 @@ const translations = {
     admin_login_title:"Hyrja e Administratorit", admin_login_text:"Vendosni fjalëkalimin për të parë rezervimet dhe mesazhet.",
     admin_login_placeholder:"Fjalëkalimi", admin_login_error:"Fjalëkalimi është i gabuar.", admin_login_button:"Hyr",
     admin_panel_title:"Rezervimet & Mesazhet", admin_clear_all:"Pastro të gjitha",
-    time_error_title:"Ora jo e Disponueshme", time_error_text:"Rezervimet pranohen vetëm nga ora 09:00 deri në 21:00.", time_error_button:"Kuptova"
+    time_error_title:"Ora jo e Disponueshme", time_error_text:"Rezervimet pranohen vetëm nga ora 09:00 deri në 20:00.", time_error_button:"Kuptova",
+    date_error_title:"Data jo e Disponueshme", date_error_text:"Rezervimet bëhen vetëm nga sot deri 10 ditë në të ardhmen. Ju lutem zgjidhni një datë tjetër.", date_error_button:"Kuptova"
   },
   en: {
     nav_home:"Home", nav_menu:"Menu", nav_location:"Location", nav_reviews:"Reviews", nav_contact:"Reserve", nav_admin:"Admin",
@@ -1380,7 +1434,8 @@ const translations = {
     admin_login_title:"Admin Login", admin_login_text:"Enter the password to view reservations and messages.",
     admin_login_placeholder:"Password", admin_login_error:"Incorrect password.", admin_login_button:"Log In",
     admin_panel_title:"Reservations & Messages", admin_clear_all:"Clear All",
-    time_error_title:"Time Not Available", time_error_text:"Reservations are only accepted between 09:00 and 21:00.", time_error_button:"Got It"
+    time_error_title:"Time Not Available", time_error_text:"Reservations are only accepted between 09:00 and 20:00.", time_error_button:"Got It",
+    date_error_title:"Date Not Available", date_error_text:"Reservations can only be made from today up to 10 days in advance. Please choose another date.", date_error_button:"Got It"
   }
 };
 
@@ -1419,7 +1474,17 @@ function toggleTheme(){
 
   const dateInput = document.getElementById('f-date');
   if(dateInput){
-    dateInput.min = new Date().toISOString().split('T')[0];
+    const today = new Date();
+    const maxDate = new Date();
+    maxDate.setDate(today.getDate() + 10);
+    dateInput.min = today.toISOString().split('T')[0];
+    dateInput.max = maxDate.toISOString().split('T')[0];
+    dateInput.addEventListener('change', function(){
+      if(this.value && !isDateWithinRange(this.value)){
+        showDateErrorModal();
+        this.value = '';
+      }
+    });
   }
 })();
 
@@ -1475,7 +1540,17 @@ function isTimeWithinHours(t){
   if(!t) return false;
   const [h, m] = t.split(':').map(Number);
   const minutes = h * 60 + m;
-  return minutes >= 9 * 60 && minutes <= 21 * 60;
+  return minutes >= 9 * 60 && minutes <= 20 * 60;
+}
+
+function isDateWithinRange(dateStr){
+  if(!dateStr) return false;
+  const selected = new Date(dateStr + 'T00:00:00');
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const maxDate = new Date(today);
+  maxDate.setDate(today.getDate() + 10);
+  return selected >= today && selected <= maxDate;
 }
 
 function isValidPhone(value){
@@ -1525,6 +1600,11 @@ document.getElementById('contact-form').addEventListener('submit', function(e){
 
   if(!isTimeWithinHours(time)){
     showTimeErrorModal();
+    return;
+  }
+
+  if(!isDateWithinRange(date)){
+    showDateErrorModal();
     return;
   }
 
@@ -1600,6 +1680,12 @@ function showTimeErrorModal(){
 }
 function closeTimeErrorModal(){
   document.getElementById('time-error-modal').classList.remove('show');
+}
+function showDateErrorModal(){
+  document.getElementById('date-error-modal').classList.add('show');
+}
+function closeDateErrorModal(){
+  document.getElementById('date-error-modal').classList.remove('show');
 }
 
 /* ---------- QUICK CONTACT FORM (Ballina) ---------- */
@@ -1741,6 +1827,7 @@ document.addEventListener('keydown', (e)=>{
     closeAdminLogin();
     closeAdminPanel();
     closeTimeErrorModal();
+    closeDateErrorModal();
   }
 });
 
