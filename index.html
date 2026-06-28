@@ -1369,14 +1369,14 @@ window.addEventListener('resize', setupHeroBorder);
 setupHeroBorder();
 
 /* ---------- PRELOADER ---------- */
-window.addEventListener('load', function(){
-  setTimeout(function(){
-    const pre = document.getElementById('preloader');
-    document.documentElement.classList.remove('preloading');
-    pre.classList.add('hide');
-    setTimeout(function(){ pre.remove(); }, 800);
-  }, 5200);
-});
+/* Fixed timer — independent of resource loading (e.g. the background video),
+   so slow connections never add extra wait beyond the animation's own duration. */
+setTimeout(function(){
+  const pre = document.getElementById('preloader');
+  document.documentElement.classList.remove('preloading');
+  pre.classList.add('hide');
+  setTimeout(function(){ pre.remove(); }, 800);
+}, 5200);
 
 /* ---------- TRANSLATIONS ---------- */
 const translations = {
